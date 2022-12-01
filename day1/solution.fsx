@@ -1,23 +1,25 @@
+open System
 open System.IO
 
-let input = 
-    File.ReadAllLines @"input.txt"
-    |> Array.map int
+let input =
+    let text = File.ReadAllText "input.txt"
+    text.Split (Environment.NewLine + Environment.NewLine)
 
-let solution1 = 
-    let solution = input
-                   |> Array.pairwise
-                   |> Array.filter (fun x -> fst x < snd x)
-                   |> Array.length
-    printf $"solution 1: %i{solution}\n"
-    0
+let singleBlock (block: string) =
+    block.Split Environment.NewLine
+    |> Array.map int
+    |> Array.sum
+
+let solution1 =
+    input
+    |> Array.map singleBlock
+    |> Array.max
 
 let solution2 =
-    let solution = input
-                    |> Array.windowed 3
-                    |> Array.map (fun x -> x |> Array.sum)
-                    |> Array.pairwise
-                    |> Array.filter (fun x -> fst x < snd x)
-                    |> Array.length
-    printf $"solution 2: %i{solution}\n"
-    0
+    input
+    |> Array.map singleBlock
+    |> Array.sortDescending
+    |> Array.take 3
+    |> Array.sum
+
+let run = printf $"solution: %i{solution2}"
